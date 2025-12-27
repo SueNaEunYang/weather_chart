@@ -7,7 +7,7 @@ $Stations = @{
 }
 
 $StartYear = 2020
-$EndYear = 2024
+$EndYear = 2025
 $OutputDir = "../data"
 
 # Helper function to ensure directory exists
@@ -31,6 +31,12 @@ foreach ($StationId in $Stations.Keys) {
     for ($Year = $StartYear; $Year -le $EndYear; $Year++) {
         $StartDate = "$Year-01-01"
         $EndDate = "$Year-12-31"
+        
+        # Don't request future dates
+        $CurrentDate = Get-Date -Format "yyyy-MM-dd"
+        if ($EndDate -gt $CurrentDate) {
+            $EndDate = $CurrentDate
+        }
         
         $Url = "https://archive-api.open-meteo.com/v1/archive?latitude=$($Info.lat)&longitude=$($Info.lon)&start_date=$StartDate&end_date=$EndDate&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSeoul"
         

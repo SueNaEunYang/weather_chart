@@ -11,7 +11,7 @@ const STATIONS = {
 };
 
 const START_YEAR = 2020; // Start small for testing
-const END_YEAR = 2024;   // Up to current year
+const END_YEAR = 2025;   // Up to current year
 const OUTPUT_DIR = '../data';
 
 // Helper to resolve paths
