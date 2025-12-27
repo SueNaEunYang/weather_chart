@@ -74,7 +74,7 @@ class DataManager {
         return {
             station_id: stationId,
             name_en: "Local Test",
-            available_years: [2020, 2021, 2022, 2023, 2024]
+            available_years: [2020, 2021, 2022, 2023, 2024, 2025]
         };
     }
 
@@ -446,7 +446,7 @@ class ChartRenderer {
 // --- App Controller ---
 class WeatherApp {
     constructor() {
-        this.currentYear = 2023;
+        this.currentYear = 2025;
         this.stationId = '108'; // Default: Seoul
 
         this.dataManager = new DataManager();
