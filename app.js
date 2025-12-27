@@ -153,7 +153,9 @@ class ChartRenderer {
 
         // Interaction State
         this.isDragging = false;
+        this.isZooming = false;
         this.lastX = 0;
+        this.lastTouchDistance = 0;
 
         this.initEvents();
     }
@@ -173,19 +175,52 @@ class ChartRenderer {
 
         // Touch Events
         this.canvas.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 1) this.startDrag(e.touches[0].clientX);
+            if (e.touches.length === 1) {
+                this.startDrag(e.touches[0].clientX);
+            } else if (e.touches.length === 2) {
+                e.preventDefault();
+                this.isZooming = true;
+                this.lastTouchDistance = this.getTouchDistance(e.touches);
+            }
         });
         window.addEventListener('touchmove', (e) => {
-            if (e.touches.length === 1) this.drag(e.touches[0].clientX);
+            if (e.touches.length === 1 && !this.isZooming) {
+                this.drag(e.touches[0].clientX);
+            } else if (e.touches.length === 2 && this.isZooming) {
+                e.preventDefault();
+                const dist = this.getTouchDistance(e.touches);
+                const delta = dist - this.lastTouchDistance;
+
+                // Sensitivity: 1px diff = 0.2% zoom change
+                // Pinch Out (Positive Delta) -> Zoom In (Positive Amount)
+                const zoomFactor = delta * 0.002;
+
+                this.zoom(zoomFactor);
+                this.lastTouchDistance = dist;
+            }
+        }, { passive: false });
+
+        window.addEventListener('touchend', (e) => {
+            this.endDrag();
+            if (e.touches.length < 2) {
+                this.isZooming = false;
+            }
         });
-        window.addEventListener('touchend', () => this.endDrag());
 
         // Wheel Zoom
         this.canvas.addEventListener('wheel', (e) => {
             e.preventDefault();
-            const direction = e.deltaY > 0 ? 1 : -1;
-            this.zoom(direction * 0.1); // 10% zoom
+            const direction = e.deltaY > 0 ? -1 : 1; // Wheel Down (Pos) -> Zoom Out (Neg)
+            // Note: My zoom func: Positive = In, Negative = Out
+            // So Wheel Down -> deltaY > 0 -> should be Negative amount
+            this.zoom(direction * 0.1);
         }, { passive: false });
+    }
+
+    getTouchDistance(touches) {
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
     resize() {
