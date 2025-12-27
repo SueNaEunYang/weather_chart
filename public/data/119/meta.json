@@ -1,0 +1,11 @@
+﻿{
+    "station_id":  "119",
+    "available_years":  [
+                            2020,
+                            2021,
+                            2022,
+                            2023,
+                            2024
+                        ],
+    "name_en":  "Suwon"
+}

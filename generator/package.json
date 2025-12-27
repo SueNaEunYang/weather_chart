@@ -1,0 +1,12 @@
+{
+  "name": "weather-data-generator",
+  "version": "1.0.0",
+  "description": "Fetches historical weather data and saves as static JSON",
+  "main": "generate.js",
+  "type": "module",
+  "scripts": {
+    "start": "node generate.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

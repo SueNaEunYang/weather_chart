@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>과거 날씨 흐름 보기</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="과거의 기온 흐름을 주식 차트처럼 보여주는 정적 데이터 뷰어입니다.">
+</head>
+
+<body>
+    <header role="banner">
+        <h1>과거 날씨 흐름</h1>
+        <div class="controls" role="group" aria-label="데이터 선택">
+            <div class="control-group">
+                <label for="station-select">지역</label>
+                <select id="station-select">
+                    <!-- Options populated by JS -->
+                    <option value="108" selected>서울 (Seoul)</option>
+                    <option value="112">인천 (Incheon)</option>
+                    <option value="119">수원 (Suwon)</option>
+                    <option value="159">부산 (Busan)</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <span class="label-text" id="year-label">연도 선택</span>
+                <div class="year-buttons" role="group" aria-labelledby="year-label">
+                    <button type="button" class="year-btn" data-action="prev" aria-label="이전 연도">&lt;</button>
+                    <span id="current-year-display" role="status">2023</span>
+                    <button type="button" class="year-btn" data-action="next" aria-label="다음 연도">&gt;</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main role="main">
+        <div class="chart-controls">
+            <button type="button" id="btn-zoom-in" aria-label="차트 확대">+</button>
+            <button type="button" id="btn-reset" aria-label="초기화">전체</button>
+            <button type="button" id="btn-zoom-out" aria-label="차트 축소">-</button>
+            <span class="help-text">※ 드래그하여 이동</span>
+        </div>
+        <div class="chart-container">
+            <canvas id="weather-chart" aria-label="일별 기온 범위 차트" role="img"></canvas>
+            <div id="loading-indicator" class="hidden" role="status">데이터 불러오는 중...</div>
+            <div id="error-message" class="hidden" role="alert"></div>
+            <div id="tooltip" class="tooltip hidden" aria-hidden="true"></div>
+        </div>
+
+        <div class="info-panel">
+            <p>※ <strong>막대 색상</strong>: 어제보다 평균 기온이 높으면 <span style="color:red">붉은색</span>, 낮으면 <span
+                    style="color:blue">파란색</span>입니다.</p>
+            <p>※ <strong>막대 길이</strong>: 그날의 최저 기온과 최고 기온의 차이(일교차)를 보여줍니다.</p>
+            <p>※ 차트를 드래그하거나 +/- 버튼을 눌러 확대/축소할 수 있습니다.</p>
+        </div>
+    </main>
+
+    <footer role="contentinfo">
+        <p>데이터 제공: Open-Meteo (Historical)</p>
+        <p>아빠의 옛날 아이디어로 딸이 AI와 함께 만들었어요</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
