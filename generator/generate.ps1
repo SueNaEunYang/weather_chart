@@ -8,7 +8,7 @@ $Stations = @{
 
 $StartYear = 2020
 $EndYear = 2024
-$OutputDir = "../public/data"
+$OutputDir = "../data"
 
 # Helper function to ensure directory exists
 function Ensure-Directory($Path) {

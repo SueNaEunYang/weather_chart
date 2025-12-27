@@ -12,7 +12,7 @@ const STATIONS = {
 
 const START_YEAR = 2020; // Start small for testing
 const END_YEAR = 2024;   // Up to current year
-const OUTPUT_DIR = '../public/data';
+const OUTPUT_DIR = '../data';
 
 // Helper to resolve paths
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
