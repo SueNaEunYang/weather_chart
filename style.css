@@ -98,6 +98,54 @@ main {
     margin: 0 auto;
 }
 
+.selection-panel {
+    background-color: #f1f3f5;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.selection-panel .selected-date {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.selection-panel .selected-temps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.selection-panel .temp-min {
+    color: #1f78b4;
+}
+
+.selection-panel .temp-max {
+    color: #e31a1c;
+}
+
+.selection-panel .label {
+    font-size: 0.9rem;
+    color: #868e96;
+    margin-right: 0.2rem;
+    font-weight: normal;
+}
+
+.range-bar {
+    display: inline-block;
+    width: 40px;
+    height: 4px;
+    background: linear-gradient(to right, #1f78b4, #e31a1c);
+    border-radius: 2px;
+}
+
 .chart-controls {
     display: flex;
     justify-content: flex-end;

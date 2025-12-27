@@ -403,11 +403,52 @@ class ChartRenderer {
             }
         });
 
+        // Store scale info for interaction
         this.scaleInfo = { padding, barWidth, viewData, start };
+
+        // Draw Selection Highlight
+        if (this.selectedIndex !== undefined && this.selectedIndex !== null) {
+            // Check if selected index is visible
+            if (this.selectedIndex >= start && this.selectedIndex < end) {
+                const visibleIndex = this.selectedIndex - start;
+                const hx = padding.left + (visibleIndex * barWidth) + (barWidth / 2);
+
+                // Draw vertical line
+                ctx.beginPath();
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([5, 5]);
+                ctx.moveTo(hx, padding.top);
+                ctx.lineTo(hx, height - padding.bottom);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Draw circle highlights on min/max
+                const day = days[this.selectedIndex];
+                const yMin = getY(day[1]);
+                const yMax = getY(day[2]);
+
+                ctx.fillStyle = '#fff';
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+
+                // Min highlight
+                ctx.beginPath();
+                ctx.arc(hx, yMin, 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Max highlight
+                ctx.beginPath();
+                ctx.arc(hx, yMax, 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
     }
 
     handleClick(e) {
-        if (this.isDragging) return; // Ignore click after drag
+        if (this.isDragging) return;
         if (!this.scaleInfo) return;
 
         const rect = this.canvas.getBoundingClientRect();
@@ -415,31 +456,37 @@ class ChartRenderer {
 
         if (mouseX < this.scaleInfo.padding.left) return;
 
-        const i = Math.floor((mouseX - this.scaleInfo.padding.left) / this.scaleInfo.barWidth);
-        const dayData = this.scaleInfo.viewData[i];
+        const visibleIndex = Math.floor((mouseX - this.scaleInfo.padding.left) / this.scaleInfo.barWidth);
 
-        if (dayData) {
-            this.showTooltip(e.clientX, e.clientY, dayData);
+        // Convert visible index to actual data index
+        const actualIndex = this.scaleInfo.start + visibleIndex;
+
+        if (this.data && this.data.days[actualIndex]) {
+            this.selectDay(actualIndex);
         }
     }
 
-    showTooltip(x, y, data) {
-        const tooltip = document.getElementById('tooltip');
-        tooltip.innerHTML = `
-            <strong>${data[0]}</strong><br>
-            Low: ${data[1]}°C<br>
-            High: ${data[2]}°C
-        `;
-        // Keep inside window
-        const winWidth = window.innerWidth;
-        if (x + 150 > winWidth) x = x - 150;
+    selectDay(index) {
+        this.selectedIndex = index;
+        const dayData = this.data.days[index];
+        this.updateInfoPanel(dayData);
+        this.draw(); // Redraw to show highlight
+    }
 
-        tooltip.style.left = `${x + 15}px`;
-        tooltip.style.top = `${y}px`;
-        tooltip.classList.remove('hidden');
+    updateInfoPanel(data) {
+        // data: [dateStr, min, max]
+        const dateEl = document.querySelector('.selection-panel .selected-date');
+        const minValEl = document.querySelector('.selection-panel .temp-min .value');
+        const maxValEl = document.querySelector('.selection-panel .temp-max .value');
 
-        // Current spec says "Click to confirm", let's keep it simple.
-        setTimeout(() => tooltip.classList.add('hidden'), 3000);
+        if (!dateEl || !minValEl || !maxValEl) return;
+
+        // Date Formatting
+        const [y, m, d] = data[0].split('-');
+        dateEl.textContent = `${y}년 ${m}월 ${d}일`;
+
+        minValEl.textContent = `${data[1]}°C`;
+        maxValEl.textContent = `${data[2]}°C`;
     }
 }
 

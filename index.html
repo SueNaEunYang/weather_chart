@@ -36,6 +36,15 @@
     </header>
 
     <main role="main">
+        <div id="selection-info" class="selection-panel" role="region" aria-live="polite">
+            <div class="selected-date">-월 -일</div>
+            <div class="selected-temps">
+                <span class="temp-min"><span class="label">최저</span> <span class="value">-</span></span>
+                <span class="range-bar"></span>
+                <span class="temp-max"><span class="label">최고</span> <span class="value">-</span></span>
+            </div>
+        </div>
+
         <div class="chart-controls">
             <button type="button" id="btn-zoom-in" aria-label="차트 확대">+</button>
             <button type="button" id="btn-reset" aria-label="초기화">전체</button>
